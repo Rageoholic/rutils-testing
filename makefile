@@ -17,7 +17,9 @@ WARNINGS = -Wall -Wextra -Werror -Wno-error=unused-variable	\
 BASECFLAGS = $(WARNINGS) --std=c99 -MD -MP -D$(PLATFORM) -D$(ARCHITECTURE)
 DEPS = $(shell find . -name "*.d")
 
+ifndef VERBOSE
 .SILENT:
+endif
 
 all: tests
 
