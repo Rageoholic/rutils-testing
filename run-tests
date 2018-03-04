@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+for var in "$@"
+do
+    exec ./$var
+done

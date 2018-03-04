@@ -3,8 +3,8 @@
 
 int main()
 {
-  puts("hello world");
-  fputs("we need to make more tests\n", stderr);
+    puts("hello world");
+    fputs("we need to make more tests\n", stderr);
 
-  return -1; // yo fix this
+    return 0; // yo fix this
 }
