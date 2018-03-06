@@ -13,7 +13,8 @@ TESTS = string-test
 
 
 WARNINGS = -Wall -Wextra -Werror -Wno-error=unused-variable	\
--Wno-error=unused-parameter -Wno-missing-field-initializers
+-Wno-error=unused-parameter -Wno-missing-field-initializers	\
+-Wno-unused-function
 
 BASECFLAGS = $(WARNINGS) --std=c99 -MD -MP -D$(PLATFORM) -D$(ARCHITECTURE)
 DEPS = $(shell find . -name "*.d")
@@ -23,6 +24,7 @@ all: tests
 tests: $(TESTS)
 	./run-tests $^
 tests: CFLAGS = $(BASECFLAGS) -g
+tests: LDFLAGS = -lcmocka
 
 
 -include $(DEPS)
