@@ -23,7 +23,7 @@ all: tests
 
 tests: $(TESTS)
 	./run-tests $^
-tests: CFLAGS = $(BASECFLAGS) -g
+tests: CFLAGS = $(BASECFLAGS) -g -O2
 tests: LDFLAGS = -lcmocka
 
 
@@ -33,7 +33,7 @@ tests: LDFLAGS = -lcmocka
 -include .user.mk		#User defined includes. Use this to configure specific settings on build files
 
 clean:
-	-$(RM) -f *.o *.d $(RUTILS_DIR)/*.o $(RUTILS_DIR)/*.d
+	-$(RM) -f *.o *.d $(RUTILS_DIR)/*.o $(RUTILS_DIR)/*.d vgcore.* $(TESTS)
 
 string-test: string-test.o rutils.a
 

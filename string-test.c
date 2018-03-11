@@ -21,31 +21,34 @@ local void CreateStringTest(void **state)
 
     assert_string_equal(str->str, cstr);
     assert_int_equal(str->len, strlen(cstr));
+    assert_int_equal(str->len, str->capacity);
 
     DestroyString(str);
 }
 
-local void CreateStringExTest(void **state)
+local void InitStringTest(void **state)
 {
     ignore state;
 
     char *cstr = "Hello world";
-    size_t len = +strlen(cstr);
+    size_t len = strlen(cstr);
     String *str = malloc(len + sizeof(String) + 1);
 
-    memset(str, 0, len);
+    memset(str, 0, sizeof(str) + len);
 
-    CreateStringEx(cstr, str, len);
+    str->capacity = len;
+
+    InitString(cstr, str);
 
     assert_string_equal(str->str, cstr);
 
-    CreateStringEx("This better work you fucking asshole", str, len);
+    InitString("This better work you fucking asshole", str);
 
     assert_string_equal(str->str, "This better");
 
     assert_int_equal(str->len, len);
 
-    CreateStringEx("Finally", str, len);
+    InitString("Finally", str);
 
     assert_string_equal(str->str, "Finally");
 
@@ -53,11 +56,12 @@ local void CreateStringExTest(void **state)
 
     DestroyString(str);
 }
+
 int main()
 {
     const struct CMUnitTest tests[] =
         {cmocka_unit_test(CreateStringTest),
-         cmocka_unit_test(CreateStringExTest)};
+         cmocka_unit_test(InitStringTest)};
 
     cmocka_run_group_tests(tests, NULL, NULL);
 }
