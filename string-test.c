@@ -12,56 +12,60 @@
    setjmp to work */
 #include <cmocka.h>
 
-local void CreateStringTest(void **state)
+local void SplitLinesTest(void **state)
 {
     ignore state;
-    char *cstr = "Hello world";
+    char strBuf[512] = {};
+    const char *lineTestString1 = "This is our first test string\n"
+                                  "We like test strings\r\n"
+                                  "And this should work\n";
+    strcpy(strBuf, lineTestString1);
+    char **strArr = SplitLines(strBuf);
+    for (int i = 0; i < 3; i++)
+    {
+        assert_non_null(strArr[i]);
+    }
+    assert_null(strArr[3]);
 
-    String *str = CreateString(cstr);
+    assert_string_equal(strArr[0], "This is our first test string");
+    assert_string_equal(strArr[1], "We like test strings");
+    assert_string_equal(strArr[2], "And this should work");
 
-    assert_string_equal(str->str, cstr);
-    assert_int_equal(str->len, strlen(cstr));
-    assert_int_equal(str->len, str->capacity);
-
-    DestroyString(str);
+    free(strArr);
 }
 
-local void InitStringTest(void **state)
+local void StrCpyAndLenTest(void **state)
+{
+    ignore state;
+    char strBuf[512];
+    const char *testStr = "We work?";
+    StrCpyAndLen(strBuf, testStr, strlen(testStr));
+    assert_true(strlen(strBuf) == strlen(testStr) - 1);
+    assert_string_equal(strBuf, "We work");
+
+    /* Your *ACTUAL* use case */
+    StrCpyAndLen(strBuf, testStr, sizeof(strBuf));
+    assert_string_equal(testStr, strBuf);
+}
+
+local void StrStartsWithTest(void **state)
 {
     ignore state;
 
-    char *cstr = "Hello world";
-    size_t len = strlen(cstr);
-    String *str = malloc(len + sizeof(String) + 1);
+    assert_true(StrStartsWith("BlahBlahBlahBlah", "Blah", NO_GIVEN_LEN));
+    assert_true(StrStartsWith("BlahBlahBlahBlah", "Blah", strlen("Blah")));
 
-    memset(str, 0, sizeof(str) + len);
-
-    str->capacity = len;
-
-    InitString(cstr, str);
-
-    assert_string_equal(str->str, cstr);
-
-    InitString("This better work you fucking asshole", str);
-
-    assert_string_equal(str->str, "This better");
-
-    assert_int_equal(str->len, len);
-
-    InitString("Finally", str);
-
-    assert_string_equal(str->str, "Finally");
-
-    assert_int_equal(str->len, strlen("Finally"));
-
-    DestroyString(str);
+    assert_false(StrStartsWith("BlahBlahBlahBlah", "Bleh", NO_GIVEN_LEN));
+    assert_false(StrStartsWith("BlahBlahBlahBlah", "Bleh", strlen("Bleh")));
 }
 
 int main()
 {
-    const struct CMUnitTest tests[] =
-        {cmocka_unit_test(CreateStringTest),
-         cmocka_unit_test(InitStringTest)};
+    const struct CMUnitTest tests[] = {
+        cmocka_unit_test(SplitLinesTest),
+        cmocka_unit_test(StrCpyAndLenTest),
+        cmocka_unit_test(StrStartsWithTest),
+    };
 
     cmocka_run_group_tests(tests, NULL, NULL);
 }

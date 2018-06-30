@@ -23,7 +23,7 @@ all: tests
 
 tests: $(TESTS)
 	./run-tests $^
-tests: CFLAGS = $(BASECFLAGS) -g -O2
+tests: CFLAGS = $(BASECFLAGS) -g
 tests: LDFLAGS = -lcmocka
 
 
