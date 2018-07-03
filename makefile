@@ -7,7 +7,7 @@ TESTDIR = tests/
 
 ARCHITECTURE = X86_64
 
-TESTS = string-test
+TESTS = string-test file-test
 
 
 
@@ -36,5 +36,7 @@ clean:
 	-$(RM) -f *.o *.d $(RUTILS_DIR)/*.o $(RUTILS_DIR)/*.d vgcore.* $(TESTS)
 
 string-test: string-test.o rutils.a
+
+file-test: file-test.o rutils.a
 
 .PHONY: all clean tests

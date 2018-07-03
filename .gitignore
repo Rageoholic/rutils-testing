@@ -54,3 +54,4 @@ dkms.conf
 # Valgrind core dumps
 vgcore.*
 /string-test
+/file-test
