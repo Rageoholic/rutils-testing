@@ -39,12 +39,18 @@ local void StrCpyAndLenTest(void **state)
     ignore state;
     char strBuf[512];
     const char *testStr = "We work?";
-    StrCpyAndLen(strBuf, testStr, strlen(testStr));
+
+    assert_true(StrCpyAndLen(strBuf, testStr, strlen(testStr)) == strlen(testStr) - 1);
     assert_true(strlen(strBuf) == strlen(testStr) - 1);
     assert_string_equal(strBuf, "We work");
 
+    const char *otherTestStr = "Oh my god you fuck up";
+
+    assert_true(StrCpyAndLen(strBuf, otherTestStr, 0) == 0);
+    assert_string_equal(strBuf, "We work");
+
     /* Your *ACTUAL* use case */
-    StrCpyAndLen(strBuf, testStr, sizeof(strBuf));
+    assert_true(StrCpyAndLen(strBuf, testStr, sizeof(strBuf)) == strlen(testStr));
     assert_string_equal(testStr, strBuf);
 }
 
